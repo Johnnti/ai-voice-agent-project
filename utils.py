@@ -6,8 +6,8 @@ from deepgram import DeepgramClient, PrerecordedOptions, SpeakOptions
 
 load_dotenv()
 
-DG_API_KEY = os.getenv('DEEPGRAM_VOICE_AGENT_KEY')
-OPENAI_API_KEY = os.getenv('OPENAI_LLM_KEY')
+DG_API_KEY = os.getenv('DG_API_KEY')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 if not DG_API_KEY or not OPENAI_API_KEY:
     raise ValueError("Please set the DG_API_KEY and/or OPEN_API_KEY environment variable.")
@@ -76,3 +76,30 @@ def get_transcript(payload, options=text_options):
     response = deepgram.listen.rest.v('1').transcribe_file(payload, options)
     
     return json.loads(response)    
+
+def get_topics(transcript):
+    """
+    Returns a list of all unique topics in a transcript
+    """
+    topics = set() #set to store unique topics
+    #iterate through every segment and find each topic and add topic to topics set above
+    for segment in transcript['results']['topics']['segments']:
+        for topic in segment['topics']:
+            topics.add(topic['topic'])
+            
+    return topics
+
+def get_summary(transcript):
+    
+    return transcript['results']['summary']['short']
+
+def save_speech_summary(transcript, options=speak_options):
+    """
+    Writes an audio summary of the transcript to disk
+    """
+    s = {'text':transcript}
+    filename = "output.wav"
+    response = deepgram.speak.rest.v("1").save(filename, s, options)
+    
+
+    
