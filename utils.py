@@ -68,3 +68,11 @@ def ask_openai(prompt):
     except openai.error.OpenAIError as e:
         return f"An error occurred: {e}"
     
+#query deepgram voice api's
+def get_transcript(payload, options=text_options):
+    """
+    Returns a JSON of Deepgram's transcription given an audio file.
+    """
+    response = deepgram.listen.rest.v('1').transcribe_file(payload, options)
+    
+    return json.loads(response)    
