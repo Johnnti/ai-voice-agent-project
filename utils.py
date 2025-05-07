@@ -73,7 +73,7 @@ def get_transcript(payload, options=text_options):
     """
     Returns a JSON of Deepgram's transcription given an audio file.
     """
-    response = deepgram.listen.rest.v('1').transcribe_file(payload, options)
+    response = deepgram.listen.rest.v('1').transcribe_file(payload, options).to_json()
     
     return json.loads(response)    
 

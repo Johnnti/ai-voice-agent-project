@@ -8,9 +8,13 @@ def main():
         with open(AUDIO_FILE, "rb") as file:
             buffer_data = file.read()
             
+        payload: FileSource = {
+            "buffer": buffer_data,
+        }
         customer_inquiry = utils.get_transcript(payload)
         
         transcribed_text = customer_inquiry['results']['channels'][0]['alternatives'][0]['transcript']
+        print(transcribed_text)
         agent_answer = utils.ask_openai(transcribed_text)
         
         
